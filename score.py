@@ -269,12 +269,13 @@ if (__name__ == "__main__"):
 	optParser.add_option("-i", dest="infile", default="data/latest.txt");
 	optParser.add_option("-o", dest="outfile", default="work/out.tsv");
 	optParser.add_option("-c", dest="num_categories", default="130");
+	optParser.add_option("-d", dest="dict_file", default="work/dictionary");
 	(options, args) = optParser.parse_args();
 	num_categories = int(options.num_categories);
-	print("num_categories=%d, infile=%s, outfile=%s" % (num_categories, options.infile, options.outfile));
+	print("num_categories=%d, dictionary=%s, infile=%s, outfile=%s" % (num_categories, options.dict_file, options.infile, options.outfile));
 
 	# ワード辞書
-	dictionary = corpora.Dictionary.load_from_text("work/dictionary");
+	dictionary = corpora.Dictionary.load_from_text(options.dict_file);
 
 	# 学習/評価用データセットリスト
 	datasets = [options.infile];
@@ -292,8 +293,8 @@ if (__name__ == "__main__"):
 	# テキストを分類
 	map = {};
 	#classify_hcluster(datasets, model, 8);
-	#classify_kmeans(datasets, model, map, num_categories);
-	classify_best(datasets, model, map);
+	classify_kmeans(datasets, model, map, num_categories);
+	#classify_best(datasets, model, map);
 
 	# 分類結果を書き出し
 	fd = open(options.outfile, "w");
