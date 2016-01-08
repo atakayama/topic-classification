@@ -35,7 +35,7 @@ def _to_target_word(node, filter={}):
 		return None;
 	if (text in stop_words):
 		return None;
-	if (not(attrs[0] in target_cls)):
+	if (len(target_cls) > 0 and not(attrs[0] in target_cls)):
 		return None;
 	return text;
 
