@@ -4,6 +4,7 @@
 import sys;
 import MeCab;
 from gensim import corpora;
+from optparse import OptionParser;
 import re, pprint;
 import myutil;
 
@@ -26,9 +27,22 @@ def make_dictionary(datafile, savefile, filter={}):
 	print(datafile + ": " + str(len(dictionary)) + " tokens");
 	dictionary.save_as_text(savefile);
 
-filter = {};
-filter["stop_words"] = ["よう", "の", "する", "いる", "ある", "ない", "なる", "れる", "できる", "こと", "もの", "てる"];
-filter["target_cls"] = ["名詞", "形容詞", "動詞"];
-filter["min_count"] = 5;
-filter["max_rate"] = 0.3;
-make_dictionary("data/all.txt", "work/dictionary", filter);
+'''
+ エントリポイント
+'''
+if (__name__ == "__main__"):
+	# 引数指定
+	optParser = OptionParser();
+	optParser.add_option("-i", dest="infile", default="data/all.txt");
+	optParser.add_option("-o", dest="outfile", default="work/dictionary");
+	(options, args) = optParser.parse_args();
+	print("infile=%s, outfile=%s" % (options.infile, options.outfile));
+
+	# フィルタ指定
+	filter = {};
+	filter["stop_words"] = ["よう", "の", "する", "いる", "ある", "ない", "なる", "れる", "できる", "こと", "もの", "てる"];
+	filter["target_cls"] = ["名詞", "形容詞", "動詞"];
+	filter["min_count"] = 5;
+	filter["max_rate"] = 0.3;
+
+	make_dictionary(options.infile, options.outfile, filter);

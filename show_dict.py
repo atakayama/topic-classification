@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt;
 import numpy as np;
 from gensim import corpora;
+from optparse import OptionParser;
 
 '''
  棒グラフを表示します。
@@ -27,5 +28,16 @@ def show_dict_data(dictionary, title, num_tops=15):
 		values.append(v);
 	show_bar_graph(labels[0:num_tops], values[0:num_tops], title);
 
-num_tops = 25;
-show_dict_data(corpora.Dictionary.load_from_text("work/dictionary"), "アンケートワード(top%d)" % (num_tops), num_tops);
+'''
+ エントリポイント
+'''
+if (__name__ == "__main__"):
+	# 引数指定
+	optParser = OptionParser();
+	optParser.add_option("-d", dest="dict_file", default="work/dictionary");
+	optParser.add_option("-t", dest="title", default="アンケートワード");
+	(options, args) = optParser.parse_args();
+	print("dictionary=%s" % (options.dict_file));
+
+	num_tops = 25;
+	show_dict_data(corpora.Dictionary.load_from_text(options.dict_file), options.title + "(top%d)" % (num_tops), num_tops);
